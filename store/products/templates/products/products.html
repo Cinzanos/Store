@@ -1,0 +1,206 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block extra_styles %}
+<style>
+    #hero {
+        padding: 50px 10%;
+        text-align: center;
+        background-color: #fff;
+    }
+    #hero img {
+        width: 100%;
+        max-width: 1000px;
+        margin-top: 20px;
+    }
+    #hero nav ul {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        list-style: none;
+        margin: 20px 0;
+    }
+    #hero nav ul li a {
+        text-decoration: none;
+        color: #0d6efd;
+        font-size: 16px;
+    }
+    #products {
+        padding: 30px 10%;
+        background-color: #f1f1f1;
+    }
+    .product-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: flex-start;
+    }
+    .product {
+        background-color: #fff;
+        width: calc(33.33% - 20px);
+        max-width: 300px;
+        padding: 15px;
+        border: 1px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+    .product img {
+        width: 100%;
+        height: 300px;
+        margin-bottom: 10px;
+    }
+    /* Пространство для названия товара */
+    .product h3 {
+        font-size: 18px;
+        margin: 5px 0; /* Уменьшаем отступы между названием и остальными элементами */
+        height: 40px;
+        overflow: hidden;
+    }
+    .product p {
+        font-size: 16px;
+        color: #666;
+        margin-bottom: 5px; /* Уменьшаем отступ между описанием и кнопками */
+    }
+    /* Пространство для описания товара, ближе к цене */
+    .product-description {
+        height: 100px; /* Установи нужную высоту */
+        overflow: hidden; /* Скрывает лишний текст, если он выходит за пределы */
+        margin-bottom: 10px; /* Отступ от нижней части */
+    }
+    .product button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 14px;
+        border-radius: 5px;
+        display: inline-block;
+        width: 100%;
+        transition: background-color 0.3s, transform 0.3s;
+        cursor: pointer;
+        margin-bottom: 10px; /* Пространство между кнопками */
+    }
+    .product button:hover {
+        background-color: #218838;
+        transform: scale(1.05);
+    }
+    .product-link button {
+        background-color: #007bff; /* Яркий синий цвет для кнопки "Перейти к товару" */
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        font-size: 14px;
+        border-radius: 5px;
+        display: inline-block;
+        width: 100%;
+        transition: background-color 0.3s, transform 0.3s;
+        cursor: pointer;
+    }
+    .product-link button:hover {
+        background-color: #0056b3; /* Более тёмный синий при наведении */
+        transform: scale(1.05);
+    }
+    .pagination {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+        font-size: 16px;
+    }
+    .page-link {
+        text-decoration: none;
+        color: #0d6efd;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #fff;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    .page-link:hover {
+        background-color: #007bff;
+        color: #fff;
+    }
+    .current-page {
+        font-weight: bold;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        background-color: #007bff;
+        color: #fff;
+    }
+    .page-link.disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    pointer-events: none;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section id="hero">
+    <h2><a href="{% url 'index' %}" style="color: black; text-decoration: none;">Store</a></h2>
+    <nav>
+        <ul>
+            {% for category in categories %}
+            <li><a href="{% url 'products:category' category.id %}">{{ category.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </nav>
+    <img src="{% static 'images/products.jpg' %}" alt="Banner Image">
+</section>
+
+<section id="products">
+    <div class="product-list">
+        {% for product in object_list %}
+        <div class="product">
+            <img src="{{ product.image.url }}" alt="#">
+            
+            <!-- Название товара с отступами -->
+            <h3>{{ product.name }}</h3>
+
+            <p>{{ product.price }} руб.</p>
+
+            <!-- Описание товара ближе к цене -->
+            <div class="product-description">
+                <p>{{ product.description }}</p>
+            </div>
+
+            <!-- Кнопки, не зависящие от описания -->
+            <a href="{% url 'products:basket_add' product.id %}"><button>Отправить в корзину</button></a>
+            <a href="#" class="product-link">
+                <button>Перейти к товару</button>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    {% if is_paginated %}
+    <div class="pagination">
+        <!-- Кнопка "Назад" -->
+        {% if page_obj.has_previous %}
+        <a href="{% url 'products:paginator' page_obj.previous_page_number %}" class="page-link">&laquo; Назад</a>
+        {% else %}
+        <span class="page-link disabled">&laquo; Назад</span>
+        {% endif %}
+    
+        <!-- Номера страниц -->
+        {% for page in paginator.page_range %}
+            {% if page == products.number %}
+            <span class="page-link current-page">{{ page }}</span>
+            {% else %}
+            <a href="{% url 'products:paginator' page %}" class="page-link">{{ page }}</a>
+            {% endif %}
+        {% endfor %}
+    
+        <!-- Кнопка "Вперёд" -->
+        {% if page_obj.has_next %}
+        <a href="{% url 'products:paginator' page_obj.next_page_number %}" class="page-link">Вперёд &raquo;</a>
+        {% else %}
+        <span class="page-link disabled">Вперёд &raquo;</span>
+        {% endif %}
+    </div>
+    {% endif %}    
+</section>
+
+{% endblock %}

@@ -1,0 +1,37 @@
+{% if baskets %}
+<!-- Правая часть -->
+<div class="cart">
+    <div class="cart-header">
+        <h2>Корзина</h2>
+        <div class="cart-total-quantity">
+            <span id="total-quantity">{{ baskets.total_quantity }}</span> <!-- Количество товаров -->
+        </div>
+    </div>
+    {% for basket in baskets %}
+    <div class="cart-item">
+        <div class="cart-item-info">
+            <p><strong>{{ basket.product.name }}</strong></p>
+            <p>{{ basket.product.description }}</p>
+            <p class="cart-item-sum">Сумма: {{ basket.sum }} руб.</p>
+        </div>
+        <div class="cart-item-controls">
+            <input type="number" value="{{ basket.quantity }}" min="0" class="cart-item-quantity" data-price="{{ basket.sum }}">
+            <a href="{% url 'products:basket_remove' basket.id %}">
+                <button class="delete-button">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </a>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="cart-summary">
+        <p><strong>Итого:</strong></p>
+        <span id="total-sum">{{ baskets.total_sum }} руб.</span><!-- Итоговая сумма -->
+    </div>
+    <button class="checkout-button">Оформить заказ</button>
+</div>
+{% else %}
+<div class="cart">
+    <h2>Корзина пуста</h2>
+</div>
+{% endif %}

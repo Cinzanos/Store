@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Store{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Подключаем иконки FontAwesome -->
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #b4b2b2d3;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 4px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+
+    h1 {
+      color: #333;
+      font-size: 26px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      text-align: left;
+    }
+
+    input[type="text"], input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 1px solid #777575;
+      border-radius: 5px;
+      font-size: 14px;
+      padding-left: 1px;
+    }
+
+    .password-container {
+      position: relative;
+      padding-right: 4px;
+    }
+
+    .password-container input {
+      padding-left: 4px;
+    }
+
+    .password-container .show-password {
+      position: absolute;
+      right: 0px; /* Двигаем глазик немного влево */
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+    }
+    .password-container .key-icon {
+      position: absolute;
+      right: 30px; /* Ключик размещён левее глазика */
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 18px;
+      color: #333;
+    }
+
+    .btn {
+      background-color: #007BFF;
+      color: #fff;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.2s ease;
+      margin-bottom: 10px;
+      width: 100%;
+    }
+
+    .btn:hover {
+      transform: scale(1.05);
+      background-color: #0056b3;
+    }
+
+    .btn-link {
+      background-color: transparent;
+      color: #007BFF;
+      text-decoration: none;
+      padding: 0;
+      font-size: 14px;
+      display: inline-block;
+      margin-top: 10px;
+    }
+
+    .btn-link:hover {
+      text-decoration: underline;
+    }
+
+    .forgot-password {
+      text-align: left;
+      font-size: 14px;
+    }
+
+    .forgot-password a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+
+    .forgot-password a:hover {
+      text-decoration: underline;
+    }
+
+    .social-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #333;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 48%;
+      transition: transform 0.2s, background-color 0.2s ease;
+    }
+
+    .social-btn:hover {
+      transform: scale(1.05);
+      background-color: #555;
+    }
+
+    .social-btn i {
+      margin-right: 8px;
+    }
+
+    .social-btn.github {
+      background-color: #333;
+    }
+
+    .social-btn.google {
+      background-color: #DB4437;
+    }
+
+    .social-btn.vk {
+      background-color: #4C75A3;
+    }
+
+    .social-btn.facebook {
+      background-color: #3b5998;
+    }
+    .form-row {
+      display: flex;
+      gap: 30px;
+    }
+
+    .form-column {
+      flex: 1;
+    }
+
+    .form-column .form-group {
+      margin-bottom: 5px;
+    }
+
+    @media (max-width: 768px) {
+      .form-row {
+        flex-direction: column;
+      }
+    }
+    /* Стиль для успешного уведомления */
+    .alert-success {
+        background-color: #19eb4a;  /* Зеленый фон */
+        color: #155724;  /* Тёмно-зеленый текст */
+        border: 1px solid #47ee6e;  /* Светло-зеленая рамка */
+    }
+
+    /* Стиль для предупреждающего уведомления */
+    .alert-warning {
+        background-color: #fff3cd;  /* Желтый фон */
+        color: #856404;  /* Желтоватый текст */
+        border: 1px solid #ffeeba;  /* Светло-желтая рамка */
+    }
+
+    /* Стиль для уведомления */
+    .custom-alert {
+        position: absolute;
+        top: 10px;  /* Убираем отступ от верхней части */
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 12px 18px;
+        border-radius: 8px;
+        width: auto;
+        z-index: 9999;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .custom-alert button.close-btn {
+        background: none;
+        border: none;
+        font-size: 18px;  /* Уменьшаем размер крестика */
+        color: #856404;  /* Цвет кнопки */
+        cursor: pointer;
+    }
+
+    .custom-alert button.close-btn:hover {
+        color: #dc3545;  /* Цвет при наведении */
+    }
+
+    .custom-alert .alert-text {
+        flex: 1; /* Это позволяет тексту занимать все доступное пространство */
+        text-align: right; /* Выравнивание текста по левому краю */
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    {% block content %}{% endblock %}
+  </div>
+  {% block scripts %}{% endblock %}
+  <script>
+        // Функция для закрытия уведомления
+        function closeAlert() {
+    var alert = document.getElementById("custom-alert");
+    alert.style.display = "none";  // Скрываем уведомление
+    }
+  </script>
+</body>
+</html>
+
