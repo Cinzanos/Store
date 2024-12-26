@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+DOMAIN_NAME = 'http://localhost:8000'
+
 
 # Application definition
 
@@ -64,6 +66,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'products.context_processors.baskets',
             ],
         },
     },
@@ -144,4 +147,13 @@ LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/' # Не забудьте заменить <user_pk> на реальный id
 
 # Sending emails
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'stores-server@yandex.com'
+EMAIL_HOST_PASSWORD = 'nueetmetvwzzeszj'  # Здесь должен быть ваш пароль приложения
+
+
+
+
+
