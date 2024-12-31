@@ -70,14 +70,23 @@
             overflow: hidden;
             z-index: 999;
         }
-        .dropdown-menu a {
+        .dropdown-menu a,
+        .dropdown-menu form button {
             display: block;
             padding: 10px 15px;
             text-decoration: none;
             color: #333;
             white-space: nowrap;
+            background: none;
+            border: none;
+            font-size: inherit;
+            font-family: inherit;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
         }
-        .dropdown-menu a:hover {
+        .dropdown-menu a:hover,
+        .dropdown-menu form button:hover {
             background-color: #f0f0f0;
         }
         .dropdown .toggle-arrow {
@@ -104,7 +113,12 @@
                         {% if user.is_superuser or user.is_staff%}
                             <a href="{% url 'admin:index' %}">Админ-панель</a>
                         {% endif %}
-                        <a href="{% url 'users:logout' %}">Выйти</a>
+                        <form method="post" action="{% url 'users:logout' %}">
+                            {% csrf_token %}
+                            <button type="submit">
+                                Выйти
+                            </button>
+                        </form>
                     </div>
                 </li>
                 {% else %}

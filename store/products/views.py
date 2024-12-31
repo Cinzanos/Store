@@ -1,6 +1,5 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import HttpResponseRedirect
-# from django.core.paginator import Paginator
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 
@@ -12,16 +11,6 @@ from products.models import Basket, Product, ProductCategory
 class IndexView(TitleMixin, TemplateView):
     template_name = 'products/index.html'
     title = 'Store'
-    # def get_context_data(self, **kwargs):
-    #     context = super(IndexView, self).get_context_data()
-    #     context['title'] = 'Store'
-    #     return context
-
-# def index(request):
-#     context = {
-#         'title': 'Главная страница - Store',
-#     }
-#     return render(request, 'products/index.html', context)
 
 
 class ProductsListView(TitleMixin, ListView):
@@ -37,24 +26,8 @@ class ProductsListView(TitleMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProductsListView, self).get_context_data()
-        # context['title'] = 'Каталог товаров - Store'
         context['categories'] = ProductCategory.objects.all()
         return context
-
-
-# def products(request, category_id=None, page_number=1):
-#     products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
-#     per_page = 3
-#     paginator = Paginator(products, per_page)
-#     products_paginator = paginator.page(page_number)
-
-#     context = {
-#         'title': 'Каталог товаров - Store',
-#         'categories': ProductCategory.objects.all(),
-#         'products': products_paginator,
-#     }
-#     return render(request, 'products/products.html', context)
-
 
 @login_required
 def basket_add(request, product_id):
